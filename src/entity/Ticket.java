@@ -18,6 +18,9 @@ public class Ticket {
         this.seatNo = seatNo;
         this.cost = cost;
     }
+    public Ticket() {
+
+    }
 
     public Long getId() {
         return id;
