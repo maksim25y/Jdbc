@@ -28,7 +28,24 @@ CREATE TABLE testblob(
     img bytea not null
 );
 
-select count(*) from test;]]></console>
+select count(*) from test;
+
+SELECT ticket.id,
+            passenger_no,
+            passenger_name,
+            flight_id,
+            seat_no,
+            cost,
+            f.status,
+            f.aircraft_id,
+            f.arrival_airport_code,
+            f.arrival_date,
+            f.departure_airport_code,
+            f.departure_date
+            FROM ticket
+            JOIN flight f
+            ON ticket.flight_id = f.id 
+where ticket.id = 1]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
