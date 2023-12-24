@@ -1,5 +1,6 @@
 package dao;
 
+import dto.TicketFilter;
 import entity.Ticket;
 import exceptions.DaoException;
 import util.ConnectionManager;
@@ -9,7 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TicketDao {
     private static final TicketDao INSTANCE = new TicketDao();
@@ -24,6 +27,37 @@ public class TicketDao {
     private static final String  FIND_BY_ID_SQL = FIND_ALL_SQL+" WHERE id = ?;";
 
     private TicketDao(){
+    }
+    public List<Ticket>findAll(TicketFilter filter){
+        List<Object>parameters = new ArrayList<>();
+        List<String>whereSql = new ArrayList<>();
+        if (filter.seatNo()!=null){
+            whereSql.add("seat_no LIKE ?");
+            parameters.add("%"+filter.seatNo()+"%");
+        }
+        if (filter.passengerName()!=null){
+            whereSql.add("passenger_name = ?");
+            parameters.add(filter.passengerName());
+        }
+        var where = whereSql.stream().collect(Collectors.joining("AND "," WHERE ","LIMIT ? OFFSET ?"));
+
+        parameters.add(filter.limit());
+        parameters.add(filter.offset());
+        var sql = FIND_ALL_SQL+where;
+        try (var connection = ConnectionManager.get(); var preparedStatement = connection.prepareStatement(sql)) {
+                for(int i=0;i<parameters.size();i++){
+                    preparedStatement.setObject(i+1,parameters.get(i));
+                }
+                var resultSet = preparedStatement.executeQuery();
+                System.out.println(preparedStatement);
+                List<Ticket>tickets = new ArrayList<>();
+                while (resultSet.next()){
+                    tickets.add(buildTicket(resultSet));
+                }
+                return tickets;
+        }catch (SQLException throwables){
+            throw new DaoException(throwables);
+        }
     }
     //This method returns all rows in table
     public static List<Ticket>findAll() {

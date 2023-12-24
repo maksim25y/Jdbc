@@ -26,16 +26,16 @@ ALTER TABLE aircraft ADD COLUMN image bytea;
 CREATE TABLE testblob(
     id serial not null primary key,
     img bytea not null
-);]]></console>
+);
+
+select count(*) from test;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" object-ref="schemas/public/tables/aircraft" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" dataset="public.airport" active-filter-id="EMPTY_FILTER">
@@ -48,6 +48,7 @@ CREATE TABLE testblob(
         <condition column="id" operator="=" value="" active="true" />
       </filter>
     </filter-actions>
+    <filter-actions connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" dataset="public.test1" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" dataset="public.testblob" active-filter-id="96d4c44c-2b83-4b6a-b579-eadb7c724c77">
       <filter id="96d4c44c-2b83-4b6a-b579-eadb7c724c77" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />
@@ -63,6 +64,7 @@ CREATE TABLE testblob(
         <condition column="id" operator="=" value="" active="true" />
       </filter>
     </filter-actions>
+    <filter-actions connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" dataset="public.test" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" dataset="public.aircraft" active-filter-id="EMPTY_FILTER">
       <filter id="1495a2a5-0504-4263-887e-69dd6bf04f61" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />

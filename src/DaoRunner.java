@@ -1,10 +1,19 @@
 import dao.TicketDao;
+import dto.TicketFilter;
 import entity.Ticket;
 
 import java.math.BigDecimal;
 
 public class DaoRunner {
     public static void main(String[] args) {
+        var ticketDao = TicketDao.getInstance();
+        TicketFilter filter = new TicketFilter(2,0,"Лариса Привольная","A1");
+        var res = ticketDao.findAll(filter);
+        for(Ticket ticket:res){
+            System.out.println(ticket);
+        }
+    }
+    public void testFind(){
         var ticketDao = TicketDao.getInstance();
         var rows = ticketDao.findAll();
         for(Ticket ticket:rows){
