@@ -52,7 +52,9 @@ where ticket.id = 1]]></console>
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" object-ref="schemas/public/tables/flight" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="9b860c57-df71-4807-ac0e-e6bdc3ab279e" dataset="public.airport" active-filter-id="EMPTY_FILTER">

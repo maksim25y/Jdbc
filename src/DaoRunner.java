@@ -42,7 +42,7 @@ public class DaoRunner {
         //ticket.setFlightId(3L);
         ticket.setSeatNo("B3");
         ticket.setCost(BigDecimal.TEN);
-        var savedTicket = TicketDao.save(ticket);
+        var savedTicket = ticketDao.save(ticket);
         System.out.println(savedTicket);
     }
 }

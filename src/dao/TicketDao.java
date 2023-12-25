@@ -6,6 +6,7 @@ import entity.Ticket;
 import exceptions.DaoException;
 import util.ConnectionManager;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,8 +16,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TicketDao {
+public class TicketDao implements Dao<Long,Ticket>{
     private static final TicketDao INSTANCE = new TicketDao();
+    private static final FlightDao flightDao =  FlightDao.getInstance();
     //Sql queries that used in methods
     private static String DELETE_SQL = "DELETE FROM ticket WHERE id=?;";
     private static final String SAVE_SQL = "INSERT INTO ticket(passenger_no,passenger_name,flight_id,seat_no,cost) values (?,?,?,?,?);";
@@ -76,7 +78,7 @@ public class TicketDao {
         }
     }
     //This method returns all rows in table
-    public static List<Ticket>findAll() {
+    public List<Ticket>findAll() {
         try (var connection = ConnectionManager.get(); var preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
             var resultSet = preparedStatement.executeQuery();
             List<Ticket>tickets = new ArrayList<>();
@@ -103,13 +105,12 @@ public class TicketDao {
         return new Ticket(resultSet.getLong("id"),
                 resultSet.getString("passenger_no"),
                 resultSet.getString("passenger_name"),
-                flight,
+                flightDao.findById(resultSet.getLong("flight_id")).orElse(null),
                 resultSet.getString("seat_no"),
                 resultSet.getBigDecimal("cost")
         );
     }
-    //This method find element in table by id
-    public static Optional<Ticket> findById(Long id){
+    public Optional<Ticket> findById(Long id) {
         try(var connection = ConnectionManager.get();var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)){
             preparedStatement.setLong(1,id);
             var resultSet = preparedStatement.executeQuery();
@@ -123,7 +124,7 @@ public class TicketDao {
         }
     }
     //This method update some rows in table
-    private static Ticket update(Ticket ticket){
+    public Ticket update(Ticket ticket){
         try (var connection = ConnectionManager.get();var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1,ticket.getPassengerNo());
             preparedStatement.setString(2,ticket.getPassengerName());
@@ -141,7 +142,7 @@ public class TicketDao {
         return INSTANCE;
     }
     //This method insert value into table
-    public static Ticket save(Ticket ticket){
+    public Ticket save(Ticket ticket){
         try (var connection = ConnectionManager.get();var preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1,ticket.getPassengerNo());
             preparedStatement.setString(2,ticket.getPassengerName());
@@ -159,7 +160,7 @@ public class TicketDao {
         }
     }
     //This method deletes row from table by ID
-    public static boolean delete(Long id){
+    public boolean delete(Long id){
         try(var connection = ConnectionManager.get();var preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setLong(1,id);
             return preparedStatement.executeUpdate()>0;
